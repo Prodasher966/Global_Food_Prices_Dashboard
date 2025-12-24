@@ -151,4 +151,3 @@ This restriction reflects a **data ethics decision**, not a technical limitation
 
 This project emphasizes analytical thinking, data integrity, and clarity over complexity.  
 V1 and V2 together demonstrate both learning progression and decision-making maturity.
-```
