@@ -1,6 +1,3 @@
-Certainly! Here's a formatted `README.md` for your project:
-
-```markdown
 # 🌍 Global Food Price Analytics Dashboard
 
 An interactive data analytics dashboard for exploring global food price trends, volatility patterns, and price forecasting using Python and Streamlit.
