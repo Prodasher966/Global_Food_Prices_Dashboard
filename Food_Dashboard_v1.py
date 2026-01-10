@@ -10,9 +10,9 @@ import numpy as np
 # ----------------------------
 @st.cache_data
 def load_data():
-    country_data = pd.read_csv('C:/Users/Kartik/Desktop/Portfolio Projects/Food_Dashboard/avg_prices_by_country_year.csv')
-    commodity_data = pd.read_csv('C:/Users/Kartik/Desktop/Portfolio Projects/Food_Dashboard/commodity_global_trends.csv')
-    volatility_data = pd.read_csv('C:/Users/Kartik/Desktop/Portfolio Projects/Food_Dashboard/commodity_country_volatility.csv')
+    country_data = pd.read_csv('avg_prices_by_country_year.csv')
+    commodity_data = pd.read_csv('commodity_global_trends.csv')
+    volatility_data = pd.read_csv('commodity_country_volatility.csv')
     return country_data, commodity_data, volatility_data
 
 country_data, commodity_data, volatility_data = load_data()
@@ -188,3 +188,4 @@ elif tab == "World Map":
         file_name=f"{commodity}_map_data.csv",
         mime='text/csv'
     )
+
