@@ -6,3 +6,4 @@ pycountry
 scikit-learn
 prophet
 streamlit
+plotly
