@@ -145,23 +145,54 @@ elif tab == "Commodity Forecast":
 # ----------------------------
 elif tab == "Volatility Clustering":
     st.subheader("Commodity Volatility Clustering")
+
+    selected_commodity = st.selectbox(
+        "Select Commodity",
+        sorted(volatility_data['Commodity'].unique())
+    )
+
     num_clusters = st.slider("Number of Clusters", 2, 6, 3)
-    df = volatility_data[['Price_STD']].fillna(0)
-    kmeans = KMeans(n_clusters=num_clusters, random_state=42).fit(df)
-    volatility_data['Cluster'] = kmeans.labels_
-    
-    # Summary Cards
-    display_summary(volatility_data, value_col='Price_STD')
-    
-    fig = px.scatter(volatility_data, x='Country', y='Commodity', color='Cluster', size='Price_STD',
-                     hover_data=['Price_STD'], title="Commodity Volatility Clusters")
+
+    filtered_df = volatility_data[
+        volatility_data['Commodity'] == selected_commodity
+    ].copy()
+
+    filtered_df['Price_STD_safe'] = (
+        filtered_df['Price_STD']
+        .fillna(0)
+        .replace(0, 0.1)
+    )
+
+    from sklearn.preprocessing import MinMaxScaler
+    scaler = MinMaxScaler(feature_range=(15, 70))
+    filtered_df['Bubble_Size'] = scaler.fit_transform(
+        filtered_df[['Price_STD_safe']]
+    )
+
+    kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+    filtered_df['Cluster'] = kmeans.fit_predict(
+        filtered_df[['Price_STD_safe']]
+    )
+
+    display_summary(filtered_df, value_col='Price_STD')
+
+    fig = px.scatter(
+        filtered_df,
+        x='Country',
+        y='Price_STD',
+        color='Cluster',
+        size='Bubble_Size',
+        hover_data=['Price_STD'],
+        title=f"Volatility Clusters for {selected_commodity}"
+    )
+
     st.plotly_chart(fig, use_container_width=True)
-    
+
     st.download_button(
-        label="Download Volatility Data",
-        data=volatility_data.to_csv(index=False).encode('utf-8'),
-        file_name="volatility_data.csv",
-        mime='text/csv'
+        "Download Filtered Volatility Data",
+        filtered_df.to_csv(index=False).encode("utf-8"),
+        f"{selected_commodity}_volatility_clusters.csv",
+        "text/csv"
     )
 
 # ----------------------------
@@ -188,4 +219,5 @@ elif tab == "World Map":
         file_name=f"{commodity}_map_data.csv",
         mime='text/csv'
     )
+
 
